@@ -1,31 +1,45 @@
 package com.carladumit.tallyapp
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.safeContentPadding
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import com.carladumit.tallyapp.screens.LoginScreen
-import javafx.stage.Screen
-import org.jetbrains.compose.resources.painterResource
+import com.carladumit.tallyapp.screens.RegisterScreen
 
-import tallyapp.shared.generated.resources.Res
-import tallyapp.shared.generated.resources.compose_multiplatform
+private enum class AppScreen {
+    LOGIN,
+    REGISTER
+}
 
 @Composable
-@Preview
 fun App() {
-    MaterialTheme {
+    var currentScreen by remember {
+        mutableStateOf(AppScreen.LOGIN)
+    }
 
+    MaterialTheme {
+        Surface(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            when (currentScreen) {
+                AppScreen.LOGIN -> {
+                    LoginScreen(
+                        onNavigateToRegister = {
+                            currentScreen = AppScreen.REGISTER
+                        }
+                    )
+                }
+
+                AppScreen.REGISTER -> {
+                    RegisterScreen(
+                        onNavigateToLogin = {
+                            currentScreen = AppScreen.LOGIN
+                        }
+                    )
+                }
+            }
+        }
     }
 }

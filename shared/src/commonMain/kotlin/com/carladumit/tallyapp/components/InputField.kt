@@ -25,10 +25,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.carladumit.tallyapp.BorderColor
-import com.carladumit.tallyapp.ScreenColor
-import com.carladumit.tallyapp.TextColor
-
+import com.carladumit.tallyapp.*
 
 @Composable
 fun InputField(
@@ -45,9 +42,8 @@ fun InputField(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(52.dp)
+                .height(48.dp)
         ) {
-            // Borde del campo
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -110,7 +106,6 @@ fun InputField(
                 }
             }
 
-            // Etiqueta superpuesta al borde
             Text(
                 text = label,
                 fontSize = 16.sp,

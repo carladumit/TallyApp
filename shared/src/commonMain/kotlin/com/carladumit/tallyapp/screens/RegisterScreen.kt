@@ -35,10 +35,13 @@ import tallyapp.shared.generated.resources.Res
 import tallyapp.shared.generated.resources.logo
 
 @Composable
-fun RegisterScreen() {
+fun RegisterScreen(
+    onNavigateToLogin: () -> Unit
+) {
     var nombre by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var confirmPassword by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
     var pais by remember { mutableStateOf("") }
     var message by remember { mutableStateOf("") }
@@ -48,11 +51,9 @@ fun RegisterScreen() {
             .fillMaxSize()
             .padding(40.dp, 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        //verticalArrangement = Arrangement.Center
     ){
         Spacer(modifier = Modifier.height(52.dp))
 
-        // LOGOTIPO
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
@@ -85,7 +86,6 @@ fun RegisterScreen() {
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        // CAMPO DE NOMBRE
         InputField(
             value = nombre,
             onValueChange = { nombre = it },
@@ -95,7 +95,6 @@ fun RegisterScreen() {
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        // CAMPO DE CORREO
         InputField(
             value = email,
             onValueChange = { email = it },
@@ -106,7 +105,6 @@ fun RegisterScreen() {
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        // CAMPO DE CONTRASEÑA
         InputField(
             value = password,
             onValueChange = { password = it },
@@ -119,10 +117,9 @@ fun RegisterScreen() {
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        // CAMPO REPETIR DE CONTRASEÑA
         InputField(
-            value = password,
-            onValueChange = { password = it },
+            value = confirmPassword,
+            onValueChange = { confirmPassword = it },
             label = "Repetir contraseña",
             placeholder = "**********",
             password = true,
@@ -141,13 +138,18 @@ fun RegisterScreen() {
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        // BOTÓN PRINCIPAL
         Button(
             onClick = {
-                message = if (email.isBlank() || password.isBlank()) {
-                    "Introduce tu correo y contraseña"
-                } else {
-                    "Iniciando sesión"
+                message = when {
+                    nombre.isBlank() && email.isBlank() && password.isBlank() && confirmPassword.isBlank() && pais.isBlank() -> "Todos los campos son obligatorios"
+                    nombre.isBlank() -> "Introduce tu nombre y apellidos"
+                    email.isBlank() -> "Introduce tu correo electrónico"
+                    !email.contains("@") -> "Introduce un correo electrónico válido"
+                    password.isBlank() -> "Introduce una contraseña"
+                    password.length < 8 -> "La contraseña debe tener al menos 8 caracteres"
+                    confirmPassword != password -> "Las contraseñas no coinciden"
+                    pais.isBlank() -> "Introduce tu país"
+                    else -> "Validacion correcta"
                 }
             },
             modifier = Modifier.fillMaxWidth().height(52.dp),
@@ -161,9 +163,16 @@ fun RegisterScreen() {
             )
         }
 
+        if (message.isNotEmpty()) {
+            Text(
+                text = message,
+                color = TallyGreen,
+                fontSize = 14.sp
+            )
+        }
+
         Spacer(modifier = Modifier.height(20.dp))
 
-        // PIE DE PÁGINA
         Row(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
@@ -178,7 +187,7 @@ fun RegisterScreen() {
                 text = "aquí",
                 fontSize = 16.sp,
                 color = TallyGreen,
-                modifier = Modifier.clickable { message = "Iniciar sesión" }
+                modifier = Modifier.clickable { onNavigateToLogin() }
             )
         }
     }
@@ -187,5 +196,5 @@ fun RegisterScreen() {
 @Preview(showBackground = true)
 @Composable
 fun RegisterScreenPreview() {
-    RegisterScreen()
+    RegisterScreen(onNavigateToLogin = {})
 }

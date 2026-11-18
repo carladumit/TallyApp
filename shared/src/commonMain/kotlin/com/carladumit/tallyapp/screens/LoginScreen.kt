@@ -39,7 +39,9 @@ import tallyapp.shared.generated.resources.logo
 import tallyapp.shared.generated.resources.google
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(
+    onNavigateToRegister: () -> Unit
+) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
@@ -50,19 +52,18 @@ fun LoginScreen() {
             .fillMaxSize()
             .padding(40.dp, 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        //verticalArrangement = Arrangement.Center
-    ){
+    ) {
         Spacer(modifier = Modifier.height(52.dp))
 
-        // LOGOTIPO
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
-        ){
+        ) {
             Image(
                 painter = painterResource(Res.drawable.logo),
                 contentDescription = "Logo de Tally",
-                modifier = Modifier.size(width = 100.dp, height = 100.dp),contentScale = ContentScale.Fit
+                modifier = Modifier.size(width = 100.dp, height = 100.dp),
+                contentScale = ContentScale.Fit
             )
 
             Spacer(modifier = Modifier.width(16.dp))
@@ -87,7 +88,6 @@ fun LoginScreen() {
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        // CAMPO DE CORREO
         InputField(
             value = email,
             onValueChange = { email = it },
@@ -98,7 +98,6 @@ fun LoginScreen() {
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        // CAMPO DE CONTRASEÑA
         InputField(
             value = password,
             onValueChange = { password = it },
@@ -111,7 +110,6 @@ fun LoginScreen() {
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        // BOTÓN PRINCIPAL
         Button(
             onClick = {
                 message = if (email.isBlank() || password.isBlank()) {
@@ -122,7 +120,10 @@ fun LoginScreen() {
             },
             modifier = Modifier.fillMaxWidth().height(52.dp),
             shape = RoundedCornerShape(8.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = TallyGreen, contentColor = Color.White)
+            colors = ButtonDefaults.buttonColors(
+                containerColor = TallyGreen,
+                contentColor = Color.White
+            )
         ) {
             Text(
                 text = "Iniciar Sesión",
@@ -131,9 +132,16 @@ fun LoginScreen() {
             )
         }
 
+        if (message.isNotEmpty()) {
+            Text(
+                text = message,
+                color = TallyGreen,
+                fontSize = 14.sp
+            )
+        }
+
         Spacer(modifier = Modifier.height(20.dp))
 
-        // RECUPERAR CONTRASEÑA
         OutlinedButton(
             onClick = { },
             modifier = Modifier.fillMaxWidth().height(52.dp),
@@ -149,7 +157,6 @@ fun LoginScreen() {
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        // SEPARADOR O
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
@@ -177,7 +184,6 @@ fun LoginScreen() {
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        // BOTÓN GOOGLE
         OutlinedButton(
             onClick = { message = "Inicio de sesión con Google" },
             modifier = Modifier.fillMaxWidth().height(52.dp),
@@ -207,7 +213,6 @@ fun LoginScreen() {
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        // PIE DE PÁGINA
         Row(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
@@ -217,12 +222,11 @@ fun LoginScreen() {
                 fontSize = 16.sp,
                 color = BorderColor
             )
-
             Text(
                 text = "ahora",
                 fontSize = 16.sp,
                 color = TallyGreen,
-                modifier = Modifier.clickable { message = "Crear una cuenta" }
+                modifier = Modifier.clickable { onNavigateToRegister() }
             )
         }
     }
@@ -231,5 +235,5 @@ fun LoginScreen() {
 @Preview(showBackground = true)
 @Composable
 fun LoginScreenPreview() {
-    LoginScreen()
+    LoginScreen(onNavigateToRegister = {})
 }
